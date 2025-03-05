@@ -29,7 +29,7 @@ export const addBookAsync = createAsyncThunk(
 export const updateBookAsync = createAsyncThunk(
     'books/update',
     async ({bookId, bookData}) => {
-        const response = await axios.put(`http://localhost:3000/books/${bookId}`, bookData)
+        const response = await axios.put(`https://book-hive-ebon.vercel.app/books`, bookData)
             if(response){
                 return response.data
             }
