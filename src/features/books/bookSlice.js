@@ -26,6 +26,16 @@ export const addBookAsync = createAsyncThunk(
     }
 )
 
+export const updateBookAsync = createAsyncThunk(
+    'books/update',
+    async ({bookId, bookData}) => {
+        const response = await axios.put(`http://localhost:3000/books/${bookId}`, bookData)
+            if(response){
+                return response.data
+            }
+    }
+)
+
 export const bookSlice = createSlice(
     {
         name: 'books',
@@ -47,7 +57,7 @@ export const bookSlice = createSlice(
                     state.books = action.payload
                 })
                 .addCase(fetchBooks.rejected, (state, action) => {
-                    state.status = error,
+                    state.status = 'error',
                     state.error = action.payload.error
                 })
                 .addCase(deleteBookAsync.pending, (state) => {
@@ -69,6 +79,19 @@ export const bookSlice = createSlice(
                     state.books.push(action.payload)
                 })
                 .addCase(addBookAsync.rejected, (state, action) => {
+                    state.status = 'error',
+                    state.error = action.payload.error
+                })
+                .addCase(updateBookAsync.pending, (state) => {
+                    state.status = 'loading'
+                }) 
+                .addCase(updateBookAsync.fulfilled, (state, action) => {
+                    state.status = 'success',
+                    state.books = state.books.map(book => 
+                        book._id === action.payload._id ? action.payload : book
+                    )
+                })
+                .addCase(updateBookAsync.rejected, (state, action) => {
                     state.status = 'error',
                     state.error = action.payload.error
                 })

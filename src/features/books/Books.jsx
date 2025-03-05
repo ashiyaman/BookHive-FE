@@ -3,10 +3,11 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { fetchBooks, deleteBookAsync } from './bookSlice'
 import BookList from './BookList'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Books = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const {books, status, error} = useSelector(state => state.books)
 
     useEffect(() => {
@@ -17,6 +18,10 @@ const Books = () => {
         dispatch(deleteBookAsync(bookId))
     }
 
+    const updateBookHandler = (book) => {
+        navigate('/addBooks', {state: book})
+    }
+
     return (
         <main className='container py-4'>
             <Link className='btn btn-primary fw-semibold text-light' to='/addBooks'>Add Book</Link>
@@ -24,8 +29,7 @@ const Books = () => {
             {status === 'loading' && <p>Loading...</p>}
             {error && <p>{error}</p>}
             {books && 
-                <BookList books={books} onDelete={deleteBookHandler} />
-               
+                <BookList books={books} onDelete={deleteBookHandler} onUpdate={updateBookHandler}/>               
             }
         </main>
     )
