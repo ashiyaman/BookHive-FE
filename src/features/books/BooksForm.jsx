@@ -56,7 +56,7 @@ const BooksForm = () => {
 
     return (
         <main className='container py-4'>
-            <h1 className='text-primary text-center'>Add Books</h1>
+            <h1 className='text-primary text-center'>{book ? 'Update' : 'Add'} Books</h1>
             <form className='my-4' onSubmit={(e) => handleSubmit(e)}>
                 <input type='text' 
                     required 
